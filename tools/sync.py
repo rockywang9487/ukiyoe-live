@@ -43,6 +43,7 @@ def patch_html(h):
     h = re.sub(r'<figure class="(?:label|caption)">.*?</figure>\n?', '', h, flags=re.S)
     h = re.sub(r'const caption = .*?, m = Math\.max\(16, Math\.min\(vw, vh\) \* [0-9.]+\)', 'const caption = 0, m = 0', h)
     h = h.replace('<p class="hint" id="hint">', '<p class="hint" id="hint" hidden>')
+    h = h.replace('cursor: crosshair', 'cursor: none')
     if 'aria-label="暂停"' not in h:
         h = re.sub(r'<button id="pause"[^>]*>.*?</button>', PAUSE, h)
         h = re.sub(r'<button id="full"[^>]*>.*?</button>', FULL, h)
