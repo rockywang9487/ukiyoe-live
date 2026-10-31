@@ -53,8 +53,8 @@ export class Window {
   }
 
   layout(vw, vh) {
-    const caption = vh < 520 ? 44 : 70;
-    const m = Math.max(16, Math.min(vw, vh) * 0.045);
+    const caption = 0;
+    const m = 0;
     let aw = vw - 2 * m, ah = aw / this.aspect;
     const maxH = vh - 2 * m - caption;
     if (ah > maxH) { ah = maxH; aw = ah * this.aspect; }

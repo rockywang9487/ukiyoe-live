@@ -85,21 +85,22 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   .loading.gone { opacity: 0; transition: opacity .8s; }
 
   @media (prefers-reduced-motion: reduce) { .hint, .loading i, .poster { transition: none; } }
+
+  .controls button { width: 32px; height: 32px; padding: 0; border-radius: 16px; display: grid; place-items: center; }
+  .controls button svg { width: 16px; height: 16px; fill: currentColor; }
+  .controls .i-play { display: none; }
+  .controls button[aria-pressed="true"] .i-play { display: block; }
+  .controls button[aria-pressed="true"] .i-pause { display: none; }
 </style>
 
 <img class="poster" id="poster" src="assets/poster.webp" alt="">
 <canvas id="stage" aria-label="喜多川歌麿《深川の雪》的动态版：上下边缘的蓝色云霞一直在流动变形，庭院里砂子般的雪不停落下；茶屋里二十多人各自忙着：划拳、弹三味线、鞠躬回礼、端托盘走动、扇信、挥手、围着火盆说笑，小猫扑着衣摆，两只麻雀扑腾。"></canvas>
 <div class="loading" id="loading"><i></i></div>
-<p class="hint" id="hint">移动光标，换个站姿看</p>
+<p class="hint" id="hint" hidden>移动光标，换个站姿看</p>
 <div class="controls">
-  <button id="pause" type="button" aria-pressed="false">暂停</button>
-  <button id="full" type="button">全屏</button>
+  <button id="pause" type="button" aria-pressed="false" aria-label="暂停" title="暂停"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="i-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g><path class="i-play" d="M8 5.5v13l11-6.5z"/></svg></button>
+  <button id="full" type="button" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
-<figure class="label">
-  <h1><small>雪月花</small>深川の雪</h1>
-  <p><span class="seal">歌</span>喜多川歌麿 · 享和二年〜文化三年頃 · 紙本著色</p>
-  <p>底本 Sotheby's Hong Kong, 2025, lot 1026</p>
-</figure>
 
 <script type="importmap">
 {
@@ -124,7 +125,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   };
   const guess = () => {
     const vw = innerWidth, vh = innerHeight, aspect = W / H;
-    const caption = vh < 520 ? 0 : vh < 760 ? 60 : 78, m = Math.max(16, Math.min(vw, vh) * 0.04);
+    const caption = 0, m = 0;
     let w = vw - 2 * m, h = w / aspect;
     if (h > vh - 2 * m - caption) { h = vh - 2 * m - caption; w = h * aspect; }
     return { x: (vw - w) / 2, y: Math.max(m, (vh - h - caption) / 2), w, h };
@@ -154,7 +155,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
       window.__fukagawa = app;
       $('pause').addEventListener('click', (e) => {
         app.state.paused = !app.state.paused;
-        e.currentTarget.textContent = app.state.paused ? '播放' : '暂停';
+        e.currentTarget.setAttribute('aria-label', app.state.paused ? '播放' : '暂停');
         e.currentTarget.setAttribute('aria-pressed', String(app.state.paused));
       });
       $('full').addEventListener('click', async () => {

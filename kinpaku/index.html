@@ -85,21 +85,22 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   .loading.gone { opacity: 0; transition: opacity .8s; }
 
   @media (prefers-reduced-motion: reduce) { .hint, .loading i, .poster { transition: none; } }
+
+  .controls button { width: 32px; height: 32px; padding: 0; border-radius: 16px; display: grid; place-items: center; }
+  .controls button svg { width: 16px; height: 16px; fill: currentColor; }
+  .controls .i-play { display: none; }
+  .controls button[aria-pressed="true"] .i-play { display: block; }
+  .controls button[aria-pressed="true"] .i-pause { display: none; }
 </style>
 
 <img class="poster" id="poster" src="assets/poster.webp" alt="">
 <canvas id="stage" aria-label="歌川国芳《相馬の古内裏》的金箔动态版：巨大的金色骷髅从武士身后抬起手臂，两名武士拔刀相对，左侧的瀧夜叉姫随光标抬头。"></canvas>
 <div class="loading" id="loading"><i></i></div>
-<p class="hint" id="hint">移动光标，看进这间古内裏</p>
+<p class="hint" id="hint" hidden>移动光标，看进这间古内裏</p>
 <div class="controls">
-  <button id="pause" type="button" aria-pressed="false">暂停</button>
-  <button id="full" type="button">全屏</button>
+  <button id="pause" type="button" aria-pressed="false" aria-label="暂停" title="暂停"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="i-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g><path class="i-play" d="M8 5.5v13l11-6.5z"/></svg></button>
+  <button id="full" type="button" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
-<figure class="caption">
-  <h1>相馬の古内裏</h1>
-  <p><span class="seal">芳</span>歌川国芳 · 弘化元年頃 · 大判錦絵三枚続</p>
-  <p>金箔 109&thinsp;mm 角 · 金沢の皿より</p>
-</figure>
 
 <script type="importmap">
 {
@@ -123,7 +124,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   };
   const guess = () => {
     const vw = innerWidth, vh = innerHeight, aspect = 3000 / 1499;
-    const caption = vh < 520 ? 44 : 70, m = Math.max(16, Math.min(vw, vh) * 0.045);
+    const caption = 0, m = 0;
     let w = vw - 2 * m, h = w / aspect;
     if (h > vh - 2 * m - caption) { h = vh - 2 * m - caption; w = h * aspect; }
     return { x: (vw - w) / 2, y: Math.max(m, (vh - h - caption) / 2), w, h };
@@ -153,7 +154,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
       window.__soma = app;
       $('pause').addEventListener('click', (e) => {
         app.state.paused = !app.state.paused;
-        e.currentTarget.textContent = app.state.paused ? '播放' : '暂停';
+        e.currentTarget.setAttribute('aria-label', app.state.paused ? '播放' : '暂停');
         e.currentTarget.setAttribute('aria-pressed', String(app.state.paused));
       });
       $('full').addEventListener('click', async () => {

@@ -67,8 +67,8 @@ export class Window {
     if (bare) {
       ax = 0; ay = 0; aw = vw; ah = vh;
     } else {
-      const caption = vh < 520 ? 0 : vh < 760 ? 60 : 78;
-      const m = Math.max(16, Math.min(vw, vh) * 0.04);
+      const caption = 0;
+      const m = 0;
       aw = vw - 2 * m; ah = aw / this.aspect;
       const maxH = vh - 2 * m - caption;
       if (ah > maxH) { ah = maxH; aw = ah * this.aspect; }

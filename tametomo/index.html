@@ -76,7 +76,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 <img class="poster" id="poster" src="assets/poster.webp" alt="">
 <canvas id="stage" aria-label="歌川国芳《肥後国水俣の海上にて為朝難風に遭う》三联浮世绘的动态版：巨浪一层接一层隆起、前卷、落入波谷，满海的爪形水花不停翻滚，浪沫沿浪峰奔走，浪尖抛出飞沫；龙在黑云里翻腾，不时低头看海；船帆在风里起伏飘动；船被浪抛起又砸回，船上和水里的人一直在挣扎抖动；白缝姬一次次扑进海里，溅起水花；天狗猛力振翅，巨鱼甩尾前扑、张口咬合。"></canvas>
 <div class="loading" id="loading"><i></i></div>
-<p class="hint" id="hint">移动光标，换个站姿看</p>
+<p class="hint" id="hint" hidden>移动光标，换个站姿看</p>
 <div class="controls">
   <button id="pause" type="button" aria-pressed="false" aria-label="暂停" title="暂停"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="i-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g><path class="i-play" d="M8 5.5v13l11-6.5z"/></svg></button>
   <button id="full" type="button" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -105,7 +105,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   };
   const guess = () => {
     const vw = innerWidth, vh = innerHeight, aspect = W / H;
-    const caption = 0, m = Math.max(16, Math.min(vw, vh) * 0.035);
+    const caption = 0, m = 0;
     let w = vw - 2 * m, h = w / aspect;
     if (h > vh - 2 * m - caption) { h = vh - 2 * m - caption; w = h * aspect; }
     return { x: (vw - w) / 2, y: Math.max(m, (vh - h - caption) / 2), w, h };
