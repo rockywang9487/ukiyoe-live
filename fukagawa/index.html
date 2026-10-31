@@ -12,7 +12,9 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 <style>
   /* Layout: the painting hung on a dark wall, a museum label beneath. A single
      night look on purpose: the painting is lit, the room is not. The painting
-     itself is drawn in WebGL; this page adds the label, two controls and a hint. */
+     itself is drawn in WebGL; this page adds the label and two controls (and a
+     hint on touch screens). No cursor is drawn over the painting; it comes back
+     on the wall around it, where the buttons are. */
   :root {
     color-scheme: dark;
     --ground: #0d0e11;      /* the wall; the canvas paints the same */
@@ -28,6 +30,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   html, body { height: 100%; }
   body { background: var(--ground); color: var(--washi); overflow: hidden; }
   #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: none; }
+  #stage.wall { cursor: default; }
 
   .label {
     position: fixed; left: 0; right: 0; margin: 0;
@@ -85,6 +88,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   .loading.gone { opacity: 0; transition: opacity .8s; }
 
   @media (prefers-reduced-motion: reduce) { .hint, .loading i, .poster { transition: none; } }
+  *, *::before, *::after { cursor: none !important; }
 
   .controls button { width: 32px; height: 32px; padding: 0; border-radius: 16px; display: grid; place-items: center; }
   .controls button svg { width: 16px; height: 16px; fill: currentColor; }
@@ -96,7 +100,7 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 <img class="poster" id="poster" src="assets/poster.webp" alt="">
 <canvas id="stage" aria-label="喜多川歌麿《深川の雪》的动态版：上下边缘的蓝色云霞一直在流动变形，庭院里砂子般的雪不停落下；茶屋里二十多人各自忙着：划拳、弹三味线、鞠躬回礼、端托盘走动、扇信、挥手、围着火盆说笑，小猫扑着衣摆，两只麻雀扑腾。"></canvas>
 <div class="loading" id="loading"><i></i></div>
-<p class="hint" id="hint" hidden>移动光标，换个站姿看</p>
+<p class="hint" id="hint" hidden></p>
 <div class="controls">
   <button id="pause" type="button" aria-pressed="false" aria-label="暂停" title="暂停"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="i-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g><path class="i-play" d="M8 5.5v13l11-6.5z"/></svg></button>
   <button id="full" type="button" aria-label="全屏" title="全屏"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -119,7 +123,9 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
 
   // Same layout as Window.layout() in src/scene.js, so the poster sits exactly
   // where the painting will appear while it loads.
+  let frame;
   const place = (ap) => {
+    frame = ap;
     root.setProperty('--ap-x', ap.x + 'px'); root.setProperty('--ap-y', ap.y + 'px');
     root.setProperty('--ap-w', ap.w + 'px'); root.setProperty('--ap-h', ap.h + 'px');
   };
@@ -133,6 +139,11 @@ body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display
   place(guess());
   addEventListener('resize', () => { if (!window.__fukagawa) place(guess()); });
   if (matchMedia('(pointer: coarse)').matches) $('hint').textContent = '拖动画面，换个站姿看';
+  // The mouse still moves the eye, but no cursor sits on the painting.
+  addEventListener('pointermove', (e) => {
+    const on = e.clientX >= frame.x && e.clientX <= frame.x + frame.w && e.clientY >= frame.y && e.clientY <= frame.y + frame.h;
+    $('stage').classList.toggle('wall', !on);
+  }, { passive: true });
 
   const gl2 = document.createElement('canvas').getContext('webgl2');
   if (!gl2) {
