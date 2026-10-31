@@ -26,7 +26,7 @@
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); max-width: 100%;
     opacity: .2; transition: opacity .3s;
   }
-  .seg:hover, .seg:focus-within { opacity: 1; }
+  .seg:hover, .seg:has(:focus-visible) { opacity: 1; }
   .seg button {
     position: relative; z-index: 1; appearance: none; border: 0; background: none; cursor: pointer;
     font: 500 clamp(12px, 1.5vw, 15px)/1 var(--mincho); letter-spacing: .18em; white-space: nowrap;
@@ -78,7 +78,7 @@
     place();
     if (push) { try { history.replaceState(null, '', '#' + id); } catch {} }
   }
-  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.id, true)));
+  tabs.forEach((t) => t.addEventListener('click', () => { show(t.dataset.id, true); t.blur(); }));
   tabs.forEach((t, i) => t.addEventListener('keydown', (e) => {
     const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!d) return;
