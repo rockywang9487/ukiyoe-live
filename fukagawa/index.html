@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>深川の雪</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap">
+<style>
+  /* Layout: the painting hung on a dark wall, a museum label beneath. A single
+     night look on purpose: the painting is lit, the room is not. The painting
+     itself is drawn in WebGL; this page adds the label, two controls and a hint. */
+  :root {
+    color-scheme: dark;
+    --ground: #0d0e11;      /* the wall; the canvas paints the same */
+    --washi: #e9e4d6;       /* label text */
+    --mist: #9aa3ad;        /* secondary text */
+    --shu: #b8432f;         /* vermilion seal */
+    --cloud: #a9c3d8;       /* the clouds' pale indigo, for focus */
+    --rule: rgba(154, 163, 173, 0.32);
+    --mincho: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    --gothic: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    --ap-x: 0px; --ap-y: 0px; --ap-w: 100vw; --ap-h: 56vw;
+  }
+  html, body { height: 100%; }
+  body { background: var(--ground); color: var(--washi); overflow: hidden; }
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+
+  .label {
+    position: fixed; left: 0; right: 0; margin: 0;
+    top: calc(var(--ap-y) + var(--ap-h) + clamp(8px, 1.4vh, 16px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 0.2rem 1rem;
+    text-align: center; pointer-events: none;
+  }
+  .label h1 {
+    margin: 0; font: 700 clamp(15px, 1.9vh, 20px)/1.25 var(--mincho);
+    letter-spacing: 0.3em; color: var(--washi); text-wrap: balance;
+  }
+  .label h1 small { font-size: 0.68em; font-weight: 500; letter-spacing: 0.24em; color: var(--mist); margin-right: 0.8em; }
+  .label p { margin: 0; font: 500 clamp(11px, 1.25vh, 12.5px)/1.5 var(--mincho); letter-spacing: 0.12em; color: var(--mist); }
+  .label .seal {
+    display: inline-block; font: 700 10px/1 var(--mincho); color: var(--washi); background: var(--shu);
+    padding: 3px 3px 2px; border-radius: 2px; letter-spacing: 0; vertical-align: 1px; margin-right: 0.5em;
+  }
+  @media (max-height: 519px) { .label { display: none; } }
+
+  .controls {
+    position: fixed; display: flex; gap: 6px; z-index: 3;
+    top: max(8px, calc(var(--ap-y) - 38px), env(safe-area-inset-top, 0px));
+    right: max(16px, calc(100vw - var(--ap-x) - var(--ap-w)), env(safe-area-inset-right, 0px));
+  }
+  .controls button {
+    appearance: none; border: 1px solid var(--rule); background: color-mix(in srgb, var(--ground) 70%, transparent);
+    color: var(--mist); font: 500 12px/1 var(--gothic); letter-spacing: 0.1em;
+    height: 28px; padding: 0 11px; border-radius: 14px; cursor: pointer; transition: color .2s, border-color .2s;
+  }
+  .controls button:hover { color: var(--washi); border-color: var(--mist); }
+  .controls button:focus-visible { outline: 2px solid var(--cloud); outline-offset: 2px; }
+
+  .hint {
+    position: fixed; left: 0; right: 0; margin: 0; text-align: center; pointer-events: none; z-index: 2;
+    top: calc(var(--ap-y) + var(--ap-h) * 0.5 - 10px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    font: 500 13px/1.5 var(--gothic); letter-spacing: 0.22em; color: var(--washi);
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.9), 0 0 3px rgba(0, 0, 0, 0.85);
+    transition: opacity 1.4s ease; opacity: 0.85;
+  }
+  .hint.gone { opacity: 0; }
+
+  .poster {
+    position: fixed; left: var(--ap-x); top: var(--ap-y); width: var(--ap-w); height: var(--ap-h);
+    max-width: none; object-fit: cover; z-index: 1; pointer-events: none; transition: opacity 1.2s ease;
+  }
+  .poster.gone { opacity: 0; }
+  .loading {
+    position: fixed; z-index: 2; left: var(--ap-x); width: var(--ap-w); top: calc(var(--ap-y) + var(--ap-h) + 3px);
+    height: 1px; background: var(--rule);
+  }
+  .loading i { display: block; height: 100%; width: 0; background: var(--washi); transition: width .25s ease; }
+  .loading.gone { opacity: 0; transition: opacity .8s; }
+
+  @media (prefers-reduced-motion: reduce) { .hint, .loading i, .poster { transition: none; } }
+</style>
+
+<img class="poster" id="poster" src="assets/poster.webp" alt="">
+<canvas id="stage" aria-label="喜多川歌麿《深川の雪》的动态版：上下边缘的蓝色云霞一直在流动变形，庭院里砂子般的雪不停落下；茶屋里二十多人各自忙着：划拳、弹三味线、鞠躬回礼、端托盘走动、扇信、挥手、围着火盆说笑，小猫扑着衣摆，两只麻雀扑腾。"></canvas>
+<div class="loading" id="loading"><i></i></div>
+<p class="hint" id="hint">移动光标，换个站姿看</p>
+<div class="controls">
+  <button id="pause" type="button" aria-pressed="false">暂停</button>
+  <button id="full" type="button">全屏</button>
+</div>
+<figure class="label">
+  <h1><small>雪月花</small>深川の雪</h1>
+  <p><span class="seal">歌</span>喜多川歌麿 · 享和二年〜文化三年頃 · 紙本著色</p>
+  <p>底本 Sotheby's Hong Kong, 2025, lot 1026</p>
+</figure>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+  import { start } from './src/main.js';
+
+  const $ = (id) => document.getElementById(id);
+  const root = document.documentElement.style;
+  const W = 4096, H = 2308;
+
+  // Same layout as Window.layout() in src/scene.js, so the poster sits exactly
+  // where the painting will appear while it loads.
+  const place = (ap) => {
+    root.setProperty('--ap-x', ap.x + 'px'); root.setProperty('--ap-y', ap.y + 'px');
+    root.setProperty('--ap-w', ap.w + 'px'); root.setProperty('--ap-h', ap.h + 'px');
+  };
+  const guess = () => {
+    const vw = innerWidth, vh = innerHeight, aspect = W / H;
+    const caption = vh < 520 ? 0 : vh < 760 ? 60 : 78, m = Math.max(16, Math.min(vw, vh) * 0.04);
+    let w = vw - 2 * m, h = w / aspect;
+    if (h > vh - 2 * m - caption) { h = vh - 2 * m - caption; w = h * aspect; }
+    return { x: (vw - w) / 2, y: Math.max(m, (vh - h - caption) / 2), w, h };
+  };
+  place(guess());
+  addEventListener('resize', () => { if (!window.__fukagawa) place(guess()); });
+  if (matchMedia('(pointer: coarse)').matches) $('hint').textContent = '拖动画面，换个站姿看';
+
+  const gl2 = document.createElement('canvas').getContext('webgl2');
+  if (!gl2) {
+    $('loading').classList.add('gone');
+    $('hint').textContent = '动态版需要 WebGL 2，这里显示的是静止版。请用最新版 Chrome、Safari 或 Firefox 打开。';
+  } else {
+    const ui = {
+      progress: (p) => {
+        $('loading').firstElementChild.style.width = `${Math.round(p * 100)}%`;
+        if (p >= 1) {
+          $('loading').classList.add('gone');
+          requestAnimationFrame(() => requestAnimationFrame(() => $('poster').classList.add('gone')));
+        }
+      },
+      layout: place,
+      firstMove: () => setTimeout(() => $('hint').classList.add('gone'), 1400),
+    };
+    setTimeout(() => $('hint').classList.add('gone'), 9000);
+    start($('stage'), ui).then((app) => {
+      window.__fukagawa = app;
+      $('pause').addEventListener('click', (e) => {
+        app.state.paused = !app.state.paused;
+        e.currentTarget.textContent = app.state.paused ? '播放' : '暂停';
+        e.currentTarget.setAttribute('aria-pressed', String(app.state.paused));
+      });
+      $('full').addEventListener('click', async () => {
+        try {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else await document.documentElement.requestFullscreen();
+        } catch { /* not available in this view */ }
+      });
+      const q = new URLSearchParams(location.search);
+      if (q.has('tune')) import('./src/tune.js').then((m) => m.tune(app)).catch(() => {});
+    }).catch((err) => {
+      console.error(err);
+      $('loading').classList.add('gone');
+      document.body.insertAdjacentHTML('beforeend', `<p class="hint">动画没能加载（${String(err.message || err)}）。这里显示的是静止版。</p>`);
+    });
+  }
+</script>
+
+</body></html>

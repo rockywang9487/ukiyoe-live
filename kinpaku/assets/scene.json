@@ -1,0 +1,614 @@
+{
+ "scale": 1.5,
+ "size": [
+  3000,
+  1498
+ ],
+ "layers": [
+  {
+   "name": "back",
+   "box": [
+    -180,
+    -90,
+    3360,
+    1678
+   ],
+   "depth": {
+    "map": true
+   },
+   "kind": "back"
+  },
+  {
+   "name": "skeleton",
+   "box": [
+    1006,
+    0,
+    1994,
+    1201
+   ],
+   "kind": "bone",
+   "depth": {
+    "z": 0.66,
+    "zx": 0.5
+   },
+   "glass": false,
+   "skin": {
+    "default": "skel_root",
+    "bones": [
+     "skel_ribs",
+     "skel_skull",
+     "skel_claw"
+    ],
+    "map": true
+   }
+  },
+  {
+   "name": "woman",
+   "box": [
+    130,
+    378,
+    420,
+    697
+   ],
+   "kind": "figure",
+   "depth": {
+    "z": 0.6
+   },
+   "glass": false,
+   "skin": {
+    "default": "woman_root",
+    "bones": [
+     "woman_chest",
+     "woman_head"
+    ],
+    "map": true
+   }
+  },
+  {
+   "name": "blind",
+   "box": [
+    244,
+    0,
+    1279,
+    1210
+   ],
+   "kind": "straw",
+   "depth": {
+    "z": 0.52,
+    "zy": -0.15
+   },
+   "glass": false,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "straw_floor",
+   "box": [
+    1976,
+    1064,
+    1024,
+    434
+   ],
+   "kind": "straw",
+   "depth": {
+    "floor": true,
+    "offset": -0.02
+   },
+   "glass": false,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "mitsukuni",
+   "box": [
+    984,
+    798,
+    529,
+    511
+   ],
+   "kind": "figure",
+   "depth": {
+    "z": 0.38
+   },
+   "glass": false,
+   "skin": {
+    "default": "mitsukuni_root",
+    "bones": [
+     "mitsukuni_chest",
+     "mitsukuni_head",
+     "mitsukuni_forearm"
+    ],
+    "map": true
+   }
+  },
+  {
+   "name": "skeleton_arm",
+   "box": [
+    1617,
+    638,
+    168,
+    463
+   ],
+   "kind": "bone",
+   "depth": {
+    "z": 0.6
+   },
+   "glass": false,
+   "skin": {
+    "default": "arm_upper",
+    "bones": []
+   }
+  },
+  {
+   "name": "araimaru",
+   "box": [
+    1488,
+    961,
+    532,
+    507
+   ],
+   "kind": "figure",
+   "depth": {
+    "z": 0.35
+   },
+   "glass": false,
+   "skin": {
+    "default": "araimaru_root",
+    "bones": [
+     "araimaru_back",
+     "araimaru_head",
+     "araimaru_arms"
+    ],
+    "map": true
+   }
+  },
+  {
+   "name": "araimaru_fists",
+   "box": [
+    1518,
+    1224,
+    160,
+    103
+   ],
+   "kind": "figure",
+   "depth": {
+    "z": 0.35
+   },
+   "glass": false,
+   "skin": {
+    "default": "araimaru_root",
+    "bones": [
+     "araimaru_back",
+     "araimaru_head",
+     "araimaru_arms"
+    ],
+    "map": true
+   }
+  },
+  {
+   "name": "mitsukuni_scabbard",
+   "box": [
+    1344,
+    969,
+    508,
+    88
+   ],
+   "kind": "scabbard",
+   "depth": {
+    "z": 0.355
+   },
+   "glass": false,
+   "skin": {
+    "default": "mitsukuni_scabbard",
+    "bones": []
+   }
+  },
+  {
+   "name": "mitsukuni_grip",
+   "box": [
+    1143,
+    943,
+    218,
+    91
+   ],
+   "kind": "figure",
+   "depth": {
+    "z": 0.36
+   },
+   "glass": false,
+   "skin": {
+    "default": "mitsukuni_grip",
+    "bones": []
+   }
+  },
+  {
+   "name": "poem",
+   "box": [
+    36,
+    24,
+    328,
+    166
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "cartouche_takiyasha",
+   "box": [
+    120,
+    327,
+    56,
+    178
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "cartouche_mitsukuni",
+   "box": [
+    1537,
+    669,
+    73,
+    259
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "cartouche_araimaru",
+   "box": [
+    1822,
+    807,
+    55,
+    178
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "sig_left",
+   "box": [
+    873,
+    1282,
+    101,
+    194
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "sig_mid",
+   "box": [
+    1128,
+    1278,
+    101,
+    195
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "sig_right",
+   "box": [
+    2851,
+    1199,
+    125,
+    271
+   ],
+   "kind": "glass",
+   "depth": {
+    "z": 0.0
+   },
+   "glass": true,
+   "skin": {
+    "default": null,
+    "bones": []
+   }
+  },
+  {
+   "name": "skeleton_forearm",
+   "box": [
+    1654,
+    1023,
+    107,
+    342
+   ],
+   "kind": "bone",
+   "depth": {
+    "z": 0.6
+   },
+   "glass": false,
+   "skin": {
+    "default": "arm_fore",
+    "bones": []
+   }
+  },
+  {
+   "name": "skeleton_hand",
+   "box": [
+    1467,
+    1312,
+    281,
+    262
+   ],
+   "kind": "bone",
+   "depth": {
+    "z": 0.6
+   },
+   "glass": false,
+   "skin": {
+    "default": "arm_hand",
+    "bones": [
+     "arm_fingers"
+    ],
+    "map": true
+   }
+  }
+ ],
+ "bones": [
+  {
+   "name": "woman_root",
+   "parent": null,
+   "pivot": [
+    345.0,
+    1050.0
+   ]
+  },
+  {
+   "name": "woman_chest",
+   "parent": "woman_root",
+   "pivot": [
+    339.0,
+    840.0
+   ]
+  },
+  {
+   "name": "woman_head",
+   "parent": "woman_chest",
+   "pivot": [
+    486.0,
+    510.0
+   ]
+  },
+  {
+   "name": "mitsukuni_root",
+   "parent": null,
+   "pivot": [
+    1245.0,
+    1290.0
+   ]
+  },
+  {
+   "name": "mitsukuni_chest",
+   "parent": "mitsukuni_root",
+   "pivot": [
+    1230.0,
+    1068.0
+   ]
+  },
+  {
+   "name": "mitsukuni_head",
+   "parent": "mitsukuni_chest",
+   "pivot": [
+    1194.0,
+    909.0
+   ]
+  },
+  {
+   "name": "mitsukuni_forearm",
+   "parent": "mitsukuni_chest",
+   "pivot": [
+    1068.0,
+    993.0
+   ]
+  },
+  {
+   "name": "mitsukuni_grip",
+   "parent": "mitsukuni_forearm",
+   "pivot": [
+    1185.0,
+    984.0
+   ]
+  },
+  {
+   "name": "mitsukuni_blade",
+   "parent": "mitsukuni_grip",
+   "pivot": [
+    1339.5,
+    1000.5
+   ]
+  },
+  {
+   "name": "mitsukuni_scabbard",
+   "parent": "mitsukuni_chest",
+   "pivot": [
+    1479.0,
+    1008.0
+   ]
+  },
+  {
+   "name": "araimaru_root",
+   "parent": null,
+   "pivot": [
+    1770.0,
+    1350.0
+   ]
+  },
+  {
+   "name": "araimaru_back",
+   "parent": "araimaru_root",
+   "pivot": [
+    1785.0,
+    1260.0
+   ]
+  },
+  {
+   "name": "araimaru_head",
+   "parent": "araimaru_back",
+   "pivot": [
+    1635.0,
+    1053.0
+   ]
+  },
+  {
+   "name": "araimaru_arms",
+   "parent": "araimaru_back",
+   "pivot": [
+    1584.0,
+    1194.0
+   ]
+  },
+  {
+   "name": "araimaru_sword",
+   "parent": "araimaru_arms",
+   "pivot": [
+    1593.0,
+    1278.0
+   ]
+  },
+  {
+   "name": "skel_root",
+   "parent": null,
+   "pivot": [
+    2250.0,
+    1140.0
+   ]
+  },
+  {
+   "name": "skel_ribs",
+   "parent": "skel_root",
+   "pivot": [
+    2340.0,
+    570.0
+   ]
+  },
+  {
+   "name": "skel_skull",
+   "parent": "skel_root",
+   "pivot": [
+    1620.0,
+    495.0
+   ]
+  },
+  {
+   "name": "skel_claw",
+   "parent": "skel_skull",
+   "pivot": [
+    1068.0,
+    576.0
+   ]
+  },
+  {
+   "name": "arm_upper",
+   "parent": null,
+   "pivot": [
+    1702.5,
+    600.0
+   ]
+  },
+  {
+   "name": "arm_fore",
+   "parent": "arm_upper",
+   "pivot": [
+    1707.0,
+    1050.0
+   ]
+  },
+  {
+   "name": "arm_hand",
+   "parent": "arm_fore",
+   "pivot": [
+    1707.0,
+    1332.9
+   ]
+  },
+  {
+   "name": "arm_fingers",
+   "parent": "arm_hand",
+   "pivot": [
+    1707.0,
+    1433.0
+   ]
+  }
+ ],
+ "floor_curve": [
+  [
+   840.0,
+   0.92
+  ],
+  [
+   960.0,
+   0.8
+  ],
+  [
+   1050.0,
+   0.6
+  ],
+  [
+   1140.0,
+   0.5
+  ],
+  [
+   1230.0,
+   0.42
+  ],
+  [
+   1320.0,
+   0.36
+  ],
+  [
+   1410.0,
+   0.3
+  ],
+  [
+   1498.5,
+   0.24
+  ]
+ ]
+}

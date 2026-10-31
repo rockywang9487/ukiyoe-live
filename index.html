@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>浮世絵 動く</title>
+<meta name="description" content="歌川国芳・喜多川歌麿・歌川国芳の浮世絵を WebGL で動かす三作品">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;700&display=swap">
+<style>
+  :root {
+    --ground: #0b0c0f; --text: #98a2ad; --text-on: #e8e2d4; --rule: rgba(152,162,173,.28);
+    --seg: rgba(255,255,255,.05); --thumb: rgba(232,226,212,.14);
+    --mincho: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+    --bar: 56px;
+  }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--ground); color: var(--text-on); overflow: hidden; transition: background .5s; }
+  header {
+    position: fixed; inset: 0 0 auto 0; height: var(--bar); z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+    box-sizing: content-box; pointer-events: none;
+  }
+  .seg {
+    pointer-events: auto; position: relative; display: grid; grid-template-columns: repeat(3, auto);
+    padding: 3px; border: 1px solid var(--rule); border-radius: 999px; background: var(--seg);
+    backdrop-filter: blur(8px); max-width: 100%;
+  }
+  .seg button {
+    position: relative; z-index: 1; appearance: none; border: 0; background: none; cursor: pointer;
+    font: 500 clamp(12px, 1.5vw, 15px)/1 var(--mincho); letter-spacing: .18em; white-space: nowrap;
+    color: var(--text); padding: 10px clamp(10px, 2.2vw, 22px); border-radius: 999px; transition: color .25s;
+  }
+  .seg button:hover { color: var(--text-on); }
+  .seg button[aria-selected="true"] { color: var(--text-on); }
+  .seg button:focus-visible { outline: 2px solid #7fa4cf; outline-offset: 2px; }
+  .thumb {
+    position: absolute; z-index: 0; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 999px;
+    background: var(--thumb); transition: transform .35s cubic-bezier(.3,.7,.2,1), width .35s cubic-bezier(.3,.7,.2,1);
+  }
+  iframe { position: fixed; left: 0; right: 0; bottom: 0; top: calc(var(--bar) + env(safe-area-inset-top, 0px)); width: 100%; height: calc(100% - var(--bar) - env(safe-area-inset-top, 0px)); border: 0; background: transparent; }
+  @media (prefers-reduced-motion: reduce) { .thumb, body { transition: none; } }
+</style>
+</head><body>
+<header>
+  <div class="seg" role="tablist" aria-label="作品">
+    <span class="thumb" id="thumb"></span>
+    <button role="tab" data-id="tametomo" aria-selected="true">為朝難風</button>
+    <button role="tab" data-id="fukagawa" aria-selected="false">深川の雪</button>
+    <button role="tab" data-id="kinpaku" aria-selected="false">金箔 相馬の古内裏</button>
+  </div>
+</header>
+<iframe id="view" title="作品" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
+<script>
+  const PIECES = {
+    tametomo: { title: '為朝難風', bg: '#0b0c0f' },
+    fukagawa: { title: '深川の雪', bg: '#0d0e11' },
+    kinpaku: { title: '金箔 相馬の古内裏', bg: '#090504' },
+  };
+  const tabs = [...document.querySelectorAll('.seg button')];
+  const thumb = document.getElementById('thumb'), view = document.getElementById('view');
+  let current = null;
+  function place() {
+    const b = tabs.find((t) => t.dataset.id === current);
+    thumb.style.width = b.offsetWidth + 'px';
+    thumb.style.transform = `translateX(${b.offsetLeft - 3}px)`;
+  }
+  function show(id, push) {
+    if (!PIECES[id]) id = 'tametomo';
+    if (id === current) return;
+    current = id;
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.id === id)));
+    // only the shown piece is loaded: the others stop drawing and free their memory
+    view.src = `${id}/`;
+    document.body.style.background = PIECES[id].bg;
+    document.title = `${PIECES[id].title} · 浮世絵 動く`;
+    place();
+    if (push) { try { history.replaceState(null, '', '#' + id); } catch {} }
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.id, true)));
+  tabs.forEach((t, i) => t.addEventListener('keydown', (e) => {
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!d) return;
+    const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n.dataset.id, true);
+  }));
+  addEventListener('hashchange', () => show(location.hash.slice(1), false));
+  addEventListener('resize', () => current && place());
+  (document.fonts?.ready || Promise.resolve()).then(() => current && place());
+  show(location.hash.slice(1), false);
+</script>
+</body></html>
