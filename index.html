@@ -54,6 +54,7 @@
 </header>
 <iframe id="view" title="作品" allow="fullscreen; accelerometer; gyroscope" allowfullscreen></iframe>
 <script>
+  const VERSION = '20261030b';   // bump when a piece changes: pages are cached for 10 min
   const PIECES = {
     tametomo: { title: '為朝難風', bg: '#0b0c0f' },
     fukagawa: { title: '深川の雪', bg: '#0d0e11' },
@@ -73,7 +74,7 @@
     current = id;
     tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.id === id)));
     // only the shown piece is loaded: the others stop drawing and free their memory
-    view.src = `${id}/`;
+    view.src = `${id}/?v=${VERSION}`;
     document.body.style.background = PIECES[id].bg;
     document.title = `${PIECES[id].title} · 浮世絵 動く`;
     place();
